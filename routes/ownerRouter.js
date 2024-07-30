@@ -12,28 +12,32 @@ router.post('/create', async (req, res, next) => {
     } else {
         bcrypt.genSalt(10, (err, salt) => {
             try {
-                bcrypt.hash(password, salt, async (err, hash) => {
-                    try {
-                        const createdOwner = await ownerModel.create({
-                            name: name,
-                            image: image,
-                            email: email,
-                            password: password
-                        });
-                        res.status(201).send({message: "owner created successfully"});
-                    } catch(err) {
-                        res.status(500);
-                    }
-                });
+                if(salt) {
+                    bcrypt.hash(password, salt, async (err, hash) => {
+                        try {
+                            if(hash) {
+                                const createdOwner = await ownerModel.create({
+                                    name: name,
+                                    image: image,
+                                    email: email,
+                                    password: password
+                                });
+                                res.status(201).send({message: "owner created successfully"});
+                            } else {
+                                res.status(500);
+                            }
+                        } catch(err) {
+                            res.status(500);
+                        }
+                    });
+                } else {
+                    res.status(500);
+                }
             } catch(err) {
                 res.status(500);
             }
         });
     }
-});
-
-router.get('/', (req, res, next) => {
-    res.render('form');
 });
 
 router.post('/login', (req, res, next) => {
@@ -42,7 +46,11 @@ router.post('/login', (req, res, next) => {
     if(owner) {
         bcrypt.compare(password, owner.password, (err, result) => {
             try {
-                res.send({message: "found"});
+                if(result) {
+                    res.send({message: "found"});
+                } else {
+                    res.status(500);
+                }
             } catch(err) {
                 res.status(401);
             }
