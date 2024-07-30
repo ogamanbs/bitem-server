@@ -28,6 +28,8 @@
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/config": "^3.3.4",
+    "@types/cookie-parser": "^1.4.7",
+    "@types/cors": "^2.8.17",
     "@types/debug": "^4.1.12"
   }
 }
