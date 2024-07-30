@@ -1,23 +1,55 @@
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcrypt');
+
 const ownerModel = require('../models/owner-model');
-    
+
 router.post('/create', async (req, res, next) => {
-    let owners = await ownerModel.find();
-    if(owners.length > 0){
-        return res.status(503).send('you don\'t have permission to create a new owner');
+    let { name, image, email, password } = req.body;
+    let owners = await ownerModel.find({email});
+    if(owners){
+        res.send({message: 'owner already exists'});
+    } else {
+        bcrypt.genSalt(10, (err, salt) => {
+            try {
+                bcrypt.hash(password, salt, async (err, hash) => {
+                    try {
+                        const createdOwner = await ownerModel.create({
+                            name: name,
+                            image: image,
+                            email: email,
+                            password: password
+                        });
+                        res.status(201).send({message: "owner created successfully"});
+                    } catch(err) {
+                        res.status(500);
+                    }
+                });
+            } catch(err) {
+                res.status(500);
+            }
+        });
     }
-    let { fullname, email, password } = req.body;
-    const createdOwner = await ownerModel.create({
-        fullname: fullname,
-        email: email,
-        password: password
-    });
-    res.status(201).send(createdOwner);
 });
 
 router.get('/', (req, res, next) => {
     res.render('form');
+});
+
+router.post('/login', (req, res, next) => {
+    let {email, password} = req.body;
+    const owner = ownerModel.findOne({email});
+    if(owner) {
+        bcrypt.compare(password, owner.password, (err, result) => {
+            try {
+                res.send({message: "found"});
+            } catch(err) {
+                res.status(401);
+            }
+        })
+    } else {
+        res.status(500);
+    }
 });
 
 module.exports = router;

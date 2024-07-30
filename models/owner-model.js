@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const ownerSchema = mongoose.Schema({
-    fullname:{
+    name:{
         type: String,
         minLength: 3,
         trim: true
@@ -12,8 +12,7 @@ const ownerSchema = mongoose.Schema({
         type: Array,
         default: []
     },
-    picture: String,
-    gstin: String
+    image: String,
 });
 
 module.exports = mongoose.model('owner', ownerSchema);

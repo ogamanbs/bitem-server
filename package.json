@@ -26,6 +26,7 @@
     "path": "^0.12.7"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/config": "^3.3.4",
     "@types/debug": "^4.1.12"
   }
