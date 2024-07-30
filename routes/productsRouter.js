@@ -28,7 +28,6 @@ router.post('/create', async (req, res, next) => {
             textcolor: textColor
         });
         if(productCreated){
-            console.log(productCreated);
             res.json({message: "product created sucessfully"});
         } else {
             res.json({message: "error creating product"});
