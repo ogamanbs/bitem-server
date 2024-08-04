@@ -15,22 +15,4 @@ router.get('/all', async (req, res, next) => {
     }
 });
 
-router.post('/create', async (req, res, next) => {
-    const {image, name, price, discount, bgcolor, panelColor, textColor} = req.body;
-    const productCreated = await productModel.create({
-        image,
-        name,
-        price,
-        discount,
-        bgcolor,
-        panelcolor: panelColor,
-        textcolor: textColor
-    });
-    if(productCreated){
-        res.json({message: "product created sucessfully"});
-    } else {
-        res.json({message: "error creating product"});
-    }
-});
-
 module.exports = router;
