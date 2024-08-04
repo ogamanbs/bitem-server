@@ -1,13 +1,26 @@
 const mongoose = require('mongoose');
 const config = require('config');
 
-mongoose
-.connect(`${config.get("MONGODB_URI")}`)
-.then(() => {
-    console.log('connected');
-})
-.catch((err) => {
-    console.error(err);
-});
+async function connectToDatabase() {
+    try {
+        // Retrieve MongoDB URI from config
+        const mongodbUri = config.get("MONGODB_URI");
+        // Check if the URI is defined
+        if (!mongodbUri) {
+            throw new Error('MONGODB_URI is not defined in the configuration.');
+        }
+        // Attempt to connect to the MongoDB database
+        await mongoose.connect(mongodbUri, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        console.log('Connected to MongoDB');
+    } catch (err) {
+        console.error('Failed to connect to MongoDB:', err.message);
+        process.exit(1); // Exit the process with failure
+    }
+}
+
+connectToDatabase();
 
 module.exports = mongoose.connection;
