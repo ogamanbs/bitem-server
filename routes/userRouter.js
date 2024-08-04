@@ -5,7 +5,7 @@ const { registerUser, loginUser, validateUser } =  require('../controllers/userA
 const userModel = require('../models/user-model');
 
 router.get('/', (req, res, next) => {
-    res.send('users');
+    res.status(200).send('users');
 });
 
 router.post('/create', registerUser);

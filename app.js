@@ -8,6 +8,7 @@ const app = express();
 
 const db = require('./config/mongoose-connection');
 
+const homeRouter = require('./routes/homeRouter');
 const userRouter = require('./routes/userRouter');
 const productsRouter = require('./routes/productsRouter');
 
@@ -22,6 +23,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(favicon(path.join(__dirname, 'public/images', 'favicon.ico')));
 app.use(cookieParser());
 
+app.use('/', homeRouter);
 app.use('/user', userRouter);
 app.use('/products', productsRouter);
 

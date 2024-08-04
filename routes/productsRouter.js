@@ -3,7 +3,7 @@ const router = express.Router();
 const productModel = require('../models/product-model');
 
 router.get('/', (req, res, next) => {
-    res.send('products');
+    res.status(200).send('products');
 })
 
 router.get('/all', async (req, res, next) => {
