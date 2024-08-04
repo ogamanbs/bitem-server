@@ -10,10 +10,7 @@ async function connectToDatabase() {
             throw new Error('MONGODB_URI is not defined in the configuration.');
         }
         // Attempt to connect to the MongoDB database
-        await mongoose.connect(mongodbUri, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        await mongoose.connect(mongodbUri);
         console.log('Connected to MongoDB');
     } catch (err) {
         console.error('Failed to connect to MongoDB:', err.message);
