@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const productModel = require('../models/product-model');
+const ownerModel = require('../models/owner-model');
 
 router.get('/', (req, res, next) => {
     res.status(200).send('products');
