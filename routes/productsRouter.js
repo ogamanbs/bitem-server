@@ -7,7 +7,7 @@ router.get('/', (req, res, next) => {
 })
 
 router.get('/all', async (req, res, next) => {
-    const products = await productModel.find();
+    const products = await productModel.find().populate('owner');
     if(products) {
         res.json({message: "sucessfully got products", products: products});
     } else {
