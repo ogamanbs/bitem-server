@@ -36,18 +36,18 @@ module.exports.registerUser = async (req, res, next) => {
 }
 
 module.exports.loginUser = async (req, res, next) => {
-    let {email, password} = req.body;
-    const user = await userModel.findOne({email: email});
+    let { email, password } = req.body;
+    const user = await userModel.findOne({ email: email });
     if(user){
         bcrypt.compare(password, user.password, (err, result) => {
             if(result){
-                res.status(200).send({message: 'successful login', info: user._id, name:user.fullname});
+                res.status(200).send({ message: 'successful login', user: user });
             } else {
-                res.status(500).send({message: 'login failed'});
+                res.status(500).send({ message: 'login failed' });
             }
         });
     } else {
-        res.status(500).send({message: 'login failed'});
+        res.status(500).send({ message: 'login failed' });
     }
 }
 

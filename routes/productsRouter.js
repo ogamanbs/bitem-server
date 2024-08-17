@@ -5,7 +5,7 @@ const ownerModel = require('../models/owner-model');
 
 router.get('/', (req, res, next) => {
     res.status(200).send('products');
-})
+});
 
 router.get('/all', async (req, res, next) => {
     const products = await productModel.find().populate('owner');
