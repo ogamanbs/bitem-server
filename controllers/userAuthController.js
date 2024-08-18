@@ -3,11 +3,11 @@ const bcrypt = require('bcrypt');
 const userModel = require('../models/user-model');
 
 module.exports.registerUser = async (req, res, next) => {
-    let {fullname, email, password} = req.body;
+    let {name, image, email, password} = req.body;
     const userPresent = await userModel.findOne({email: email});
     if(userPresent){
-        let name = fullname.charAt(0).toUpperCase() + fullname.slice(1);
-        res.status(401).json({message: `${name} you already have an account with this email`});
+        let fullname = name.charAt(0).toUpperCase() + name.slice(1);
+        res.status(401).json({message: `${fullname} you already have an account with this email`});
     }
     else {
         bcrypt.genSalt(10, (err, salt) => {
@@ -15,7 +15,8 @@ module.exports.registerUser = async (req, res, next) => {
                 bcrypt.hash(password, salt, async (err, hash) => {
                     if(hash){
                         const createdUser = await userModel.create({
-                            fullname,
+                            name,
+                            image,
                             email,
                             password: hash
                         });

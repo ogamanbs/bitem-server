@@ -35,6 +35,8 @@
     "@types/config": "^3.3.4",
     "@types/cookie-parser": "^1.4.7",
     "@types/cors": "^2.8.17",
-    "@types/debug": "^4.1.12"
+    "@types/debug": "^4.1.12",
+    "@types/morgan": "^1.9.9",
+    "@types/serve-favicon": "^2.5.7"
   }
 }

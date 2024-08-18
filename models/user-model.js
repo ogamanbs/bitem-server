@@ -1,10 +1,13 @@
 const mongoose = require('mongoose');
 
 const userSchema = mongoose.Schema({
-    fullname:{
+    name:{
         type:String,
         trim: true,
         minLength: 3,
+    },
+    image: {
+        type: String
     },
     email: {
         type: String,
