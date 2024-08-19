@@ -52,11 +52,11 @@ module.exports.loginUser = async (req, res, next) => {
     }
 }
 
-module.exports.validateUser = async (req, res, next) => {
-    let {info} = req.body;
+module.exports.getUser = async (req, res, next) => {
+    const { info } = req.body;
     const user = await userModel.findOne({_id: info});
     if(user){
-        res.status(201).json({message: 'user validated', user:user});
+        res.status(200).json({message: 'user validated', user: user});
     } else {
         res.status(503).json({message: 'error validating user'});
     }
