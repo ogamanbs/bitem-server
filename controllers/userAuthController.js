@@ -37,8 +37,8 @@ module.exports.registerUser = async (req, res, next) => {
 }
 
 module.exports.loginUser = async (req, res, next) => {
-    let { email, password } = req.body;
-    const user = await userModel.findOne({ email: email });
+    const { email, password } = req.body;
+    const user = await userModel.findOne({email: email });
     if(user){
         bcrypt.compare(password, user.password, (err, result) => {
             if(result){
