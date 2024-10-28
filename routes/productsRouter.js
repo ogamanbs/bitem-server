@@ -16,4 +16,15 @@ router.get('/all', async (req, res, next) => {
     }
 });
 
+router.post('/specific', async (req, res, next) => {
+    const { id } = req.body;
+    console.log(id);
+    const product = await productModel.findOne({_id:id});
+    if(product) {
+        res.status(200).json({message: "sucessfully got product", product: product});
+    } else {
+        res.status(304).json({message: "failed to get product", product: {}});
+    }
+});
+
 module.exports = router;
