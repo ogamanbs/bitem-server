@@ -3,7 +3,8 @@ const bcrypt = require('bcrypt');
 const userModel = require('../models/user-model');
 
 module.exports.registerUser = async (req, res, next) => {
-    let {name, image, email, password} = req.body;
+    const {name, image, email, password} = req.body;
+    console.log(name, image, email, password);
     const userPresent = await userModel.findOne({email: email});
     if(userPresent){
         let fullname = name.charAt(0).toUpperCase() + name.slice(1);
@@ -38,6 +39,7 @@ module.exports.registerUser = async (req, res, next) => {
 
 module.exports.loginUser = async (req, res, next) => {
     const { email, password } = req.body;
+    console.log(email, password);
     const user = await userModel.findOne({email: email });
     if(user){
         bcrypt.compare(password, user.password, (err, result) => {

@@ -1,12 +1,11 @@
 const mongoose = require('mongoose');
-const config = require('config');
 const dotenv = require('dotenv');
 dotenv.config();
 
 async function connectToDatabase() {
     try {
         // Retrieve MongoDB URI from config
-        const mongodbUri = process.env.MONGODB_URI || config.get("MONGODB_URI");
+        const mongodbUri = process.env.MONGODB_URI;
         // Check if the URI is defined
         if (!mongodbUri) {
             throw new Error('MONGODB_URI is not defined in the configuration.');
