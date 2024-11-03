@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
     ],
     email: {
         type: String,
-        trim: true,
+        trim:true
     },
     password: {
         type: String,
@@ -56,6 +56,10 @@ const userSchema = new mongoose.Schema({
             item: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'product',
+            },
+            numberOfItems: {
+                type: Number,
+                default: 1
             },
             isDelivered: {
                 type: Boolean,

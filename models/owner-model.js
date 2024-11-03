@@ -8,7 +8,7 @@ const ownerSchema = mongoose.Schema({
     },
     email: {
         type: String,
-        trim: true,
+        trim:true
     },
     contact: {
         type: Number,

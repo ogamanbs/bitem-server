@@ -1,10 +1,14 @@
 const mongoose = require('mongoose');
 
 const productSchema = mongoose.Schema({
-    image: String,
+    images: [
+        {
+            type:String,
+        }
+    ],
     name: {
         type: String,
-        trim: true,
+        trim:true
     },
     price: Number,
     discount: {
@@ -14,6 +18,10 @@ const productSchema = mongoose.Schema({
     units: {
         type: Number,
         default:0,
+    },
+    description: {
+        type: String,
+        trim:true
     },
     features: [
         {
