@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 
 const userModel = require('../models/user-model');
+const productModel = require('../models/product-model');
 
 module.exports.registerUser = async (req, res, next) => {
     const {name, image, email, password} = req.body;
@@ -53,11 +54,29 @@ module.exports.loginUser = async (req, res, next) => {
 }
 
 module.exports.getUser = async (req, res, next) => {
-    const { info } = req.body;
-    const user = await userModel.findOne({_id: info});
+    const { id } = req.body;
+    const user = await userModel.findOne({_id: id});
     if(user){
         res.status(200).json({message: 'user validated', user: user});
     } else {
         res.status(503).json({message: 'error validating user'});
+    }
+}
+
+module.exports.updateWishlist = async (req, res, next) => {
+    const { token, id } = req.body;
+    const user = await userModel.findOne({_id: token});
+    const product = await productModel.findOne({_id: id});
+    if(user && product) {
+        const updatedUser = await userModel.findOneAndUpdate(
+            {_id: user._id},
+            {$addToSet: {wishlist: {item: id}}},
+            {returnDocument: "after"}
+        );
+        if(updatedUser) {
+            res.status(200).json({message: 'product successfully added to user wishlist', user: updatedUser})
+        }
+    } else {
+        res.status(500).json({message: 'error updating user wishlist', user: updatedUser});
     }
 }
