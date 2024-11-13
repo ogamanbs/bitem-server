@@ -16,7 +16,7 @@ module.exports.registerUser = async (req, res, next) => {
                 bcrypt.hash(password, salt, async (err, hash) => {
                     if(hash){
                         const createdUser = await userModel.create({
-                            name,
+                            name: name.toLowerCase(),
                             image,
                             email,
                             password: hash
@@ -63,7 +63,7 @@ module.exports.getUser = async (req, res, next) => {
     }
 }
 
-module.exports.updateWishlist = async (req, res, next) => {
+module.exports.addToWishlist = async (req, res, next) => {
     const { token, id } = req.body;
     const user = await userModel.findOne({_id: token});
     const product = await productModel.findOne({_id: id});
@@ -77,6 +77,40 @@ module.exports.updateWishlist = async (req, res, next) => {
             res.status(200).json({message: 'product successfully added to user wishlist', user: updatedUser})
         }
     } else {
-        res.status(500).json({message: 'error updating user wishlist', user: updatedUser});
+        res.status(500).json({message: 'error updating user wishlist', user: null});
+    }
+}
+
+module.exports.removeFromWishlist = async (req, res, next) => {
+    const {token, id} = req.body;
+    const user = await userModel.findOne({_id: token});
+    const product = await productModel.findOne({_id: id});
+    if(user && product) {
+        const updatedUser = await userModel.findOneAndUpdate(
+            {_id: user._id},
+            {$pull: {wishlist: {item: id}}},
+            {returnDocument: "after"}
+        );
+        if(updatedUser) {
+            res.status(200).json({message: 'product successfully added to user wishlist', user: updatedUser})
+        }
+    } else {
+        res.status(500).json({message: 'error updating user wishlist', user: null});
+    }
+}
+
+module.exports.getWishlist = async (req, res, next) => {
+    const { id } = req.body;
+    const user = await userModel.findOne({_id: id}).populate({
+        path: 'wishlist',
+        populate: {
+            path: 'item',
+            model: productModel
+        }
+    });
+    if(user) {
+        res.status(200).json({message: 'successfully fetched products', wishlist: user.wishlist});
+    } else {
+        res.status(500).json({message: 'error fetching products', wishlist: null});
     }
 }
