@@ -114,3 +114,55 @@ module.exports.getWishlist = async (req, res, next) => {
         res.status(500).json({message: 'error fetching products', wishlist: null});
     }
 }
+
+module.exports.getCartItems = async (req, res, next) => {
+    const { id } = req.body;
+    const user = await userModel.findOne({_id: id}).populate({
+        path: 'cart',
+        populate: {
+            path: 'items',
+            model: productModel
+        }
+    });
+    if(user) {
+        res.status(200).json({message: 'successfully fetched products', cartItems: user.cart});
+    } else {
+        res.status(500).json({message: 'error fetching products', catItems: null});
+    }
+}
+
+module.exports.addToCart = async (req, res, next) => {
+    const { token, id } = req.body;
+    const user = await userModel.findOne({_id: token});
+    const product = await productModel.findOne({_id: id});
+    if(user && product) {
+        const updatedUser = await userModel.findOneAndUpdate(
+            {_id: user._id},
+            {$addToSet: {cart: {item: id}}},
+            {returnDocument: "after"}
+        );
+        if(updatedUser) {
+            res.status(200).json({message: 'product successfully added to user wishlist', user: updatedUser})
+        }
+    } else {
+        res.status(500).json({message: 'error updating user wishlist', user: null});
+    }
+}
+
+module.exports.removeFromCart = async (req, res, next) => {
+    const {token, id} = req.body;
+    const user = await userModel.findOne({_id: token});
+    const product = await productModel.findOne({_id: id});
+    if(user && product) {
+        const updatedUser = await userModel.findOneAndUpdate(
+            {_id: user._id},
+            {$pull: {cart: {item: id}}},
+            {returnDocument: "after"}
+        );
+        if(updatedUser) {
+            res.status(200).json({message: 'product successfully added to user wishlist', user: updatedUser})
+        }
+    } else {
+        res.status(500).json({message: 'error updating user wishlist', user: null});
+    }
+}
