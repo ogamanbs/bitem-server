@@ -120,14 +120,14 @@ module.exports.getCartItems = async (req, res, next) => {
     const user = await userModel.findOne({_id: id}).populate({
         path: 'cart',
         populate: {
-            path: 'items',
+            path: 'item',
             model: productModel
         }
     });
     if(user) {
         res.status(200).json({message: 'successfully fetched products', cartItems: user.cart});
     } else {
-        res.status(500).json({message: 'error fetching products', catItems: null});
+        res.status(500).json({message: 'error fetching products', cartItems: null});
     }
 }
 
@@ -142,10 +142,10 @@ module.exports.addToCart = async (req, res, next) => {
             {returnDocument: "after"}
         );
         if(updatedUser) {
-            res.status(200).json({message: 'product successfully added to user wishlist', user: updatedUser})
+            res.status(200).json({message: 'product successfully added to user cart', user: updatedUser})
         }
     } else {
-        res.status(500).json({message: 'error updating user wishlist', user: null});
+        res.status(500).json({message: 'error updating user cart', user: null});
     }
 }
 
@@ -160,9 +160,9 @@ module.exports.removeFromCart = async (req, res, next) => {
             {returnDocument: "after"}
         );
         if(updatedUser) {
-            res.status(200).json({message: 'product successfully added to user wishlist', user: updatedUser})
+            res.status(200).json({message: 'product successfully added to user cart', user: updatedUser})
         }
     } else {
-        res.status(500).json({message: 'error updating user wishlist', user: null});
+        res.status(500).json({message: 'error updating user cart', user: null});
     }
 }
